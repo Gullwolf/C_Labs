@@ -1,0 +1,83 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include "constituency.h"
+
+void construct_Constituency(struct Constituency* const obj, char const* name, unsigned int* const neighbours, unsigned int const num_neighbours){
+	
+	obj->name = NULL;
+	obj->neighbours = NULL;
+	obj->num_neighbours = 0;
+
+	obj->name = (char*) malloc((strlen(name) + 1) * sizeof(char));
+	obj->neighbours = (unsigned int*) malloc(num_neighbours * sizeof(unsigned int));
+
+	memcpy(obj->name, name, (strlen(name) + 1) * sizeof(char));
+	memcpy(obj->neighbours, neighbours, num_neighbours * sizeof(unsigned int));
+	obj->num_neighbours = num_neighbours;
+
+}
+
+void print_Constituency(struct Constituency* const obj){
+	printf("%s | %u neighbours | [",obj->name, obj->num_neighbours);
+	int i = 0;
+	for(i = 0; i < obj->num_neighbours; ++i){
+		printf(" %u ", obj->neighbours[i]);
+	}
+	printf("]");
+}
+
+void destruct_Constituency(struct Constituency* const obj){
+	if(obj->name != NULL) {
+		free(obj->name);
+		obj->name = NULL;
+	}
+	if(obj->neighbours != NULL) {
+		free(obj->neighbours);
+		obj->neighbours = NULL;
+	}
+	obj->num_neighbours = 0;
+}
+
+int load_Constituencies(char const* file_path, struct Constituency* const constituencies, unsigned int const constituencies_loaded){
+	FILE * fp;
+	int line = 1;
+	
+	fp = fopen(file_path, "r");
+	if(fp == NULL){
+		*constituencies = NULL;
+		*constituencies_loaded = 0;
+		printf("Could not open file \"%s\"\n", file_path);
+		return 0;
+	}else{
+		unsigned int num_constituencies;
+		fscanf(fp, "%u\n", &num_constituencies);
+		if(num_constituencies == NULL){
+			return 0;
+		}
+		Constituency constituencies = malloc(num_constituencies * sizeof(Constituency));
+		int i = 0;
+		for(i = 0; i < num_constituencies; ++i){
+			unsigned int num_neighbours = 0;
+			fscanf(fp, "%u,", &num_neighbours);
+			(unsigned int[]) neighbours[num_neighbours];
+			int j = 0;
+			for(j = 0; j < num_neighbours; ++j){
+				fscanf(fp, "%u,", &neighbours[j]);
+			}
+			int current_position = 0;
+			current_postition = ftell(fp);
+			int new_postition = 0;
+			fscanf(fp, "\n", &new_positition);
+			fseek(fp, current_position, new_position);
+			int len = 0;
+			len = (new_positition - current_postition) - 1;
+			char* name = (char*) malloc(len * sizeof(char));
+			name = NULL;
+			fscanf(fp, "%s\n", &name);
+			construct_Constituency(&constituencies[i], name, neighbours, num_neighbours)
+		}
+		return 1;
+	}
+
+}
